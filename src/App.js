@@ -1,30 +1,21 @@
-import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
-import Header from './components/Layout/Header';
-import Meals from './components/Meals/Meals';
-import Cart from './components/Cart/Cart';
-import CartProvider from './store/CartProvider';
+import Headers from './components/Header';
+import Auth from './components/Auth';
+import UserProfile from './components/UserProfile';
+import Counter from './components/Counter';
 
 function App() {
-  const [cartIsShown, setCartIsShown] = useState(false);
+	const isAuthenticated = useSelector(({ auth }) => auth.isAuthenticated);
 
-  const showCartHandler = () => {
-    setCartIsShown(true);
-  };
-
-  const hideCartHandler = () => {
-    setCartIsShown(false);
-  };
-
-  return (
-    <CartProvider>
-      {cartIsShown && <Cart onClose={hideCartHandler} />}
-      <Header onShowCart={showCartHandler} />
-      <main>
-        <Meals />
-      </main>
-    </CartProvider>
-  );
+	return (
+		<>
+			<Headers />
+			{!isAuthenticated && <Auth />}
+			{isAuthenticated && <UserProfile />}
+			<Counter />
+		</>
+	);
 }
 
 export default App;
